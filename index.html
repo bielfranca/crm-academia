@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM · Academia da Noiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose: #C9856A;
+  --rose-light: #F5EBE6;
+  --rose-dark: #8B4F38;
+  --gold: #C4A882;
+  --gold-light: #F5F0E8;
+  --cream: #FAF7F4;
+  --white: #FFFFFF;
+  --ink: #2C2320;
+  --ink-mid: #6B5C58;
+  --ink-light: #A89490;
+  --border: rgba(44,35,32,0.10);
+  --border-soft: rgba(44,35,32,0.06);
+  --shadow: 0 2px 16px rgba(44,35,32,0.08);
+  --shadow-lg: 0 8px 40px rgba(44,35,32,0.14);
+  --r: 10px;
+  --r-lg: 16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+
+/* AUTH SCREEN */
+#auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:2rem;background:var(--cream)}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--rose-dark);margin-bottom:6px;letter-spacing:0.02em}
+.auth-sub{font-size:14px;color:var(--ink-light);margin-bottom:2.5rem;font-weight:300}
+.auth-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem 2.5rem;max-width:380px;width:100%;box-shadow:var(--shadow)}
+.auth-card h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:8px;color:var(--ink)}
+.auth-card p{font-size:13px;color:var(--ink-mid);line-height:1.6;margin-bottom:1.5rem}
+.google-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--ink);transition:all .2s;justify-content:center}
+.google-btn:hover{background:var(--cream);border-color:var(--gold)}
+.google-btn img{width:20px}
+.setup-info{margin-top:1.5rem;background:var(--gold-light);border-radius:var(--r);padding:1rem 1.25rem;text-align:left}
+.setup-info p{font-size:12px;color:var(--ink-mid);line-height:1.7}
+.setup-info strong{color:var(--rose-dark)}
+.setup-step{font-size:12px;color:var(--ink-mid);padding:3px 0}
+.setup-step::before{content:"→ ";color:var(--gold)}
+#setup-form{margin-top:1.25rem}
+#setup-form input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--white);margin-top:6px}
+#setup-form input:focus{outline:none;border-color:var(--rose)}
+#setup-form label{font-size:12px;color:var(--ink-mid);display:block;margin-top:12px}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh}
+header{background:var(--white);border-bottom:1px solid var(--border-soft);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--border-soft)}
+.hd-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--rose-dark);letter-spacing:0.02em}
+.hd-brand span{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:var(--ink-light);margin-left:8px;letter-spacing:0}
+.hd-right{display:flex;align-items:center;gap:10px}
+.sync-badge{font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--ink-light);display:flex;align-items:center;gap:5px}
+.sync-badge.syncing{color:var(--gold);border-color:var(--gold)}
+.sync-badge.ok{color:#4A7C59;border-color:#C5DECC;background:#F0F7F2}
+.sync-badge.err{color:#A33;border-color:#F5CCCC;background:#FFF0F0}
+.btn{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 16px;border-radius:var(--r);border:1px solid var(--border);background:var(--white);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-weight:400}
+.btn:hover{background:var(--cream)}
+.btn.primary{background:var(--rose);color:#fff;border-color:var(--rose)}
+.btn.primary:hover{background:var(--rose-dark)}
+
+main{padding:1.25rem 1.5rem;flex:1}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+.stat{background:var(--white);border:1px solid var(--border-soft);border-radius:var(--r);padding:.85rem 1rem}
+.stat-label{font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--ink);line-height:1}
+.stat-sub{font-size:11px;color:var(--ink-light);margin-top:3px}
+
+/* FILTER */
+.controls{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.filter-pill{font-size:12px;padding:5px 13px;border-radius:99px;border:1px solid var(--border);background:var(--white);cursor:pointer;color:var(--ink-mid);transition:all .15s}
+.filter-pill.active{background:var(--rose);color:#fff;border-color:var(--rose)}
+.search-wrap{margin-left:auto}
+.search-wrap input{font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 12px;border:1px solid var(--border);border-radius:99px;background:var(--white);color:var(--ink);width:180px}
+.search-wrap input:focus{outline:none;border-color:var(--rose)}
+
+/* KANBAN */
+.kanban{display:flex;gap:10px;overflow-x:auto;padding-bottom:1.5rem;align-items:flex-start}
+.kanban::-webkit-scrollbar{height:6px}
+.kanban::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+.col{min-width:170px;flex:0 0 175px}
+.col-head{padding:8px 10px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--r) var(--r) 0 0;border:1px solid var(--border);border-bottom:none}
+.col-title{font-size:11px;font-weight:500;color:var(--ink-mid);text-transform:uppercase;letter-spacing:.05em}
+.col-cnt{font-size:11px;background:var(--cream);color:var(--ink-light);border-radius:99px;padding:1px 8px;border:1px solid var(--border)}
+.col-body{background:var(--white);border:1px solid var(--border);border-radius:0 0 var(--r) var(--r);padding:8px;min-height:220px}
+
+/* CARDS */
+.card{background:var(--cream);border:1px solid var(--border-soft);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;cursor:pointer;transition:all .15s;position:relative}
+.card:hover{border-color:var(--rose);background:var(--white);box-shadow:var(--shadow)}
+.card-name{font-size:13px;font-weight:500;color:var(--ink);line-height:1.3;padding-right:18px}
+.card-phone{font-size:11px;color:var(--ink-light);margin-top:2px}
+.card-row{display:flex;align-items:center;gap:5px;margin-top:5px;flex-wrap:wrap}
+.pill{font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500}
+.pill-q{background:#FEF0EB;color:#8B4F38}
+.pill-m{background:#FDF3E3;color:#7A5220}
+.pill-f{background:#E8EEF8;color:#2B4A8C}
+.pill-won{background:#EDF7F0;color:#2E6B45}
+.pill-lost{background:#FCF0F0;color:#8B2E2E}
+.pill-prog{background:#F0EDF8;color:#4A3580}
+.budget{font-size:11px;color:var(--ink-mid);margin-top:4px}
+.card-note{font-size:10px;color:var(--ink-light);margin-top:3px;line-height:1.4}
+.card-fu{font-size:10px;color:var(--gold);margin-top:3px;display:flex;align-items:center;gap:3px}
+.del-btn{position:absolute;top:7px;right:8px;font-size:16px;cursor:pointer;color:var(--ink-light);opacity:0;border:none;background:none;transition:opacity .15s;line-height:1}
+.card:hover .del-btn{opacity:1}
+.move-row{display:flex;gap:4px;margin-top:6px}
+.mv{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:99px;cursor:pointer;background:var(--white);color:var(--ink-mid);transition:all .15s}
+.mv:hover{background:var(--rose-light);border-color:var(--rose);color:var(--rose-dark)}
+
+/* ACCENT COLORS PER STAGE */
+.acc-0{border-top:3px solid #C9856A}
+.acc-1{border-top:3px solid #C4A882}
+.acc-2{border-top:3px solid #8B7BAD}
+.acc-3{border-top:3px solid #4A7C59}
+.acc-4{border-top:3px solid #5E8DB3}
+.acc-5{border-top:3px solid #B38B5E}
+.acc-6{border-top:3px solid #B35E7A}
+.acc-7{border-top:3px solid #5E8FAD}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(44,35,32,.45);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:var(--white);border-radius:var(--r-lg);padding:1.5rem;width:420px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;margin-bottom:1.25rem;color:var(--ink)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid .full{grid-column:1/-1}
+.fld label{font-size:11px;color:var(--ink-light);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.fld input,.fld select,.fld textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);transition:border-color .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--rose);background:var(--white)}
+.fld textarea{min-height:68px;resize:vertical}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-soft)}
+
+/* LOADING */
+#loading{display:none;position:fixed;inset:0;background:rgba(250,247,244,.85);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+#loading.show{display:flex}
+.spinner{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--rose);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-size:13px;color:var(--ink-mid)}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink);color:#fff;font-size:13px;padding:10px 18px;border-radius:99px;z-index:500;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading"><div class="spinner"></div><p id="loading-msg">Carregando...</p></div>
+<div class="toast" id="toast"></div>
+
+<!-- AUTH / SETUP SCREEN -->
+<div id="auth-screen">
+  <div class="auth-logo">Academia da Noiva</div>
+  <div class="auth-sub">CRM · Identidade Visual</div>
+
+  <div class="auth-card">
+    <h2>Configurar acesso</h2>
+    <p>Para salvar os dados no Google Drive compartilhado entre você e sua sócia, configure a API do Google abaixo.</p>
+
+    <div class="setup-info">
+      <p><strong>Como configurar (apenas uma vez):</strong></p>
+      <p class="setup-step">Acesse <strong>console.cloud.google.com</strong></p>
+      <p class="setup-step">Crie um projeto → Ative <strong>Google Sheets API</strong></p>
+      <p class="setup-step">APIs e Serviços → Credenciais → Criar credencial → <strong>ID do cliente OAuth 2.0</strong> → tipo: Aplicativo da Web</p>
+      <p class="setup-step">Em "Origens JavaScript", adicione <strong>null</strong> (para arquivo local) ou o domínio do arquivo</p>
+      <p class="setup-step">Copie o <strong>Client ID</strong> e cole abaixo</p>
+      <p class="setup-step">Crie uma Planilha no Google Sheets e cole o ID (o trecho longo da URL entre /d/ e /edit)</p>
+    </div>
+
+    <div id="setup-form">
+      <label>Google Client ID</label>
+      <input id="cfg-clientid" type="text" placeholder="xxxxx.apps.googleusercontent.com" value="">
+      <label>ID da Planilha Google Sheets</label>
+      <input id="cfg-sheetid" type="text" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" value="">
+      <div style="margin-top:14px">
+        <button class="btn primary" style="width:100%;justify-content:center" onclick="saveConfig()">Salvar configuração e conectar</button>
+      </div>
+      <div style="margin-top:10px">
+        <button class="btn" style="width:100%;justify-content:center" onclick="useDemoMode()">▶ Usar sem Drive (modo local)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <header>
+    <div>
+      <span class="hd-brand">Academia da Noiva <span>— Identidade Visual</span></span>
+    </div>
+    <div class="hd-right">
+      <div class="sync-badge" id="sync-badge">⏳ Aguardando</div>
+      <button class="btn" onclick="syncNow()" title="Sincronizar agora">↻ Sync</button>
+      <button class="btn primary" onclick="openAdd()">+ Nova cliente</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats" id="stats"></div>
+
+    <div class="controls">
+      <button class="filter-pill active" data-f="all" onclick="setFilter('all',this)">Todas</button>
+      <button class="filter-pill" data-f="Quente" onclick="setFilter('Quente',this)">🔥 Quente</button>
+      <button class="filter-pill" data-f="Morno" onclick="setFilter('Morno',this)">🌤 Morno</button>
+      <button class="filter-pill" data-f="Frio" onclick="setFilter('Frio',this)">❄️ Frio</button>
+      <div class="search-wrap"><input type="text" id="search" placeholder="Buscar cliente..." oninput="render()"></div>
+    </div>
+
+    <div class="kanban" id="kanban"></div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="bgClick(event)">
+  <div class="modal">
+    <h2 id="modal-h">Nova cliente</h2>
+    <div class="form-grid">
+      <div class="fld full"><label>Nome</label><input id="f-name" type="text" placeholder="Nome completo"></div>
+      <div class="fld"><label>WhatsApp</label><input id="f-phone" type="text" placeholder="11 99999-0000"></div>
+      <div class="fld"><label>Temperatura</label><select id="f-temp"><option>Quente</option><option>Morno</option><option>Frio</option></select></div>
+      <div class="fld"><label>Orçamento (R$)</label><input id="f-budget" type="number" placeholder="0"></div>
+      <div class="fld"><label>Casamento</label><input id="f-wedding" type="text" placeholder="dd/mm/aaaa"></div>
+      <div class="fld"><label>Follow-up</label><input id="f-followup" type="text" placeholder="dd/mm/aaaa"></div>
+      <div class="fld full"><label>Etapa</label>
+        <select id="f-stage">
+          <option value="0">Captação</option>
+          <option value="1">Pagamento</option>
+          <option value="2">Contrato</option>
+          <option value="3">Contrato assinado</option>
+          <option value="4">Briefing enviado</option>
+          <option value="5">Briefing respondido</option>
+          <option value="6">Produção principal</option>
+          <option value="7">Produção restante</option>
+        </select>
+      </div>
+      <div class="fld full"><label>Status</label>
+        <select id="f-status">
+          <option value="">Em andamento</option>
+          <option value="won">Fechou ✓</option>
+          <option value="lost">Não fechou ✗</option>
+        </select>
+      </div>
+      <div class="fld full"><label>Observações / Follow-up</label><textarea id="f-notes" placeholder="Notas, combinados, próximos passos..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn primary" onclick="saveClient()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Google API -->
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
+<script>
+const STAGES=['Captação','Pagamento','Contrato','Contrato assinado','Briefing enviado','Briefing respondido','Produção principal','Produção restante'];
+const SHEET_NAME='Clientes';
+const RANGE=`${SHEET_NAME}!A:M`;
+
+let clients=[];
+let nextId=1;
+let editId=null;
+let filterTemp='all';
+let demoMode=false;
+let cfg={clientId:'',sheetId:''};
+let tokenClient=null;
+let accessToken=null;
+let syncTimer=null;
+
+// ---- INITIAL DATA ----
+const SEED=[
+  [1,'Renata Rodrigues','11 99945-1151','Quente',465,'','','Achou caro. Ofertei combo de papelaria.',0,'lost'],
+  [2,'Emily Garcia','16 99394-3373','Quente',180,'10/10/26','20/05/2026','Vai fechar. Cobrar no dia 20/05.',0,''],
+  [3,'Gabriela Penido','11 98820-6664','Quente',510,'','14/05/2026','',0,''],
+  [4,'Débora Rosas','32 9807-6334','Quente',306,'','','',0,'won'],
+  [5,'Karen Camargo','11 97285-0709','Quente',0,'','','Fechou o Combo de Papelaria',1,'won'],
+  [6,'Bárbara Luiza','11 97779-4320','Quente',662,'03/10/26','','',0,'won'],
+  [7,'Isabela Kancelskis','11 99881-6818','Quente',572,'06/09/26','','',0,''],
+  [8,'Barbara Tavares Soares','62 99898-5194','Quente',110,'07/08/26','14/05/2026','',0,''],
+  [9,'Patricia Costa','21995989143','Quente',100,'','','',0,'won'],
+  [10,'Paula Lage','21 99557-4479','Morno',0,'05/09/27','05/09/2026','',0,'lost'],
+  [11,'Jamille Harbouki','55 99923-9353','Morno',0,'2027 ou 2028','','Vai casar em 2027 ou 2028',0,'lost'],
+  [12,'Dayane Gomes','62 9459-1359','Morno',250,'','','',0,''],
+  [13,'Ligia Mortari','11 95064-0162','Frio',0,'','14/05/2026','Enviar pv do combo de papelaria',0,''],
+  [14,'Bianca Gonçalves','14 99723-2315','Frio',0,'','14/05/2026','Vocês chegaram a definir quais itens querem fazer na papelaria?',0,''],
+  [15,'Grazy Heinzen','45 9958-5598','Frio',0,'','18/05/2026','',0,''],
+  [16,'Carol Leonardo','','Frio',0,'','','Fiz FU 12/05',0,''],
+  [17,'Arthur Severo','24 99265-0700','Frio',0,'','','FIZ FU 11/05',0,''],
+  [18,'Carolina Carvalho','35 9979-7239','Frio',0,'','','FIZ FU 11/05',0,''],
+  [19,'Bruna Luci','24 99226-3073','Frio',0,'','14/05/2026','',0,''],
+  [20,'Larissa Sinder','22 98848-9410','Frio',0,'','14/05/2026','',0,''],
+  [21,'Gabriela Belchior','81 9987-5014','Frio',0,'','14/05/2026','',0,''],
+  [22,'Jane','11 95979-2129','Frio',0,'21/11/2026','14/05/2026','',0,''],
+];
+
+function seedToClients(rows){
+  return rows.map(r=>({id:r[0],name:r[1],phone:r[2],temp:r[3],budget:r[4]||0,wedding:r[5]||'',followup:r[6]||'',notes:r[7]||'',stage:r[8]||0,status:r[9]||''}));
+}
+
+// ---- CONFIG ----
+function loadConfig(){
+  try{
+    const s=localStorage.getItem('crm_cfg');
+    if(s){cfg=JSON.parse(s);}
+    if(cfg.clientId) document.getElementById('cfg-clientid').value=cfg.clientId;
+    if(cfg.sheetId) document.getElementById('cfg-sheetid').value=cfg.sheetId;
+  }catch(e){}
+}
+function saveConfig(){
+  cfg.clientId=document.getElementById('cfg-clientid').value.trim();
+  cfg.sheetId=document.getElementById('cfg-sheetid').value.trim();
+  if(!cfg.clientId||!cfg.sheetId){toast('Preencha o Client ID e o ID da planilha.');return;}
+  localStorage.setItem('crm_cfg',JSON.stringify(cfg));
+  initGoogleAuth();
+}
+function useDemoMode(){
+  demoMode=true;
+  clients=seedToClients(SEED);
+  nextId=23;
+  showApp();
+  toast('Modo local ativo — dados salvos apenas neste navegador.');
+  setSyncBadge('err','Modo local');
+}
+
+// ---- GOOGLE AUTH ----
+function initGoogleAuth(){
+  showLoading('Conectando ao Google...');
+  tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:cfg.clientId,
+    scope:'https://www.googleapis.com/auth/spreadsheets',
+    callback:(resp)=>{
+      if(resp.error){hideLoading();toast('Erro de autenticação: '+resp.error);return;}
+      accessToken=resp.access_token;
+      loadFromSheet();
+    }
+  });
+  tokenClient.requestAccessToken();
+}
+
+// ---- SHEETS API ----
+async function sheetsGet(range){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}`;
+  const r=await fetch(url,{headers:{Authorization:`Bearer ${accessToken}`}});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+async function sheetsUpdate(range,values){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`;
+  const r=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({range,majorDimension:'ROWS',values})});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+async function sheetsClear(range){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}:clear`;
+  const r=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+
+async function ensureSheet(){
+  // Verifica se aba existe, cria se necessário
+  const meta=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}`,{headers:{Authorization:`Bearer ${accessToken}`}});
+  const data=await meta.json();
+  const exists=data.sheets&&data.sheets.some(s=>s.properties.title===SHEET_NAME);
+  if(!exists){
+    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}:batchUpdate`,{
+      method:'POST',
+      headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+      body:JSON.stringify({requests:[{addSheet:{properties:{title:SHEET_NAME}}}]})
+    });
+  }
+}
+
+async function loadFromSheet(){
+  try{
+    await ensureSheet();
+    const data=await sheetsGet(RANGE);
+    const rows=(data.values||[]).slice(1).filter(r=>r&&r[0]);
+    if(rows.length===0){
+      // planilha vazia → inicializa com seed
+      clients=seedToClients(SEED);
+      nextId=23;
+      await writeAllToSheet();
+    } else {
+      clients=rows.map(r=>({
+        id:parseInt(r[0])||0,
+        name:r[1]||'',phone:r[2]||'',temp:r[3]||'Frio',
+        budget:parseFloat(r[4])||0,wedding:r[5]||'',followup:r[6]||'',
+        notes:r[7]||'',stage:parseInt(r[8])||0,status:r[9]||''
+      }));
+      nextId=Math.max(...clients.map(c=>c.id),0)+1;
+    }
+    hideLoading();
+    showApp();
+    setSyncBadge('ok','Sincronizado');
+    autoSync();
+  }catch(e){
+    hideLoading();
+    toast('Erro ao carregar planilha: '+e.message);
+    setSyncBadge('err','Erro');
+  }
+}
+
+function clientsToRows(){
+  const header=['id','nome','whatsapp','temperatura','orcamento','casamento','followup','notas','etapa','status'];
+  const rows=clients.map(c=>[c.id,c.name,c.phone,c.temp,c.budget,c.wedding,c.followup,c.notes,c.stage,c.status]);
+  return [header,...rows];
+}
+
+async function writeAllToSheet(){
+  try{
+    await sheetsClear(RANGE);
+    await sheetsUpdate(RANGE,clientsToRows());
+    setSyncBadge('ok','Sincronizado');
+  }catch(e){
+    setSyncBadge('err','Erro ao salvar');
+    toast('Erro ao salvar: '+e.message);
+  }
+}
+
+async function syncNow(){
+  if(demoMode){
+    // local storage fallback
+    try{localStorage.setItem('crm_local',JSON.stringify({clients,nextId}));}catch(e){}
+    toast('Dados salvos localmente.');return;
+  }
+  setSyncBadge('syncing','Salvando...');
+  await writeAllToSheet();
+}
+
+function autoSync(){
+  if(syncTimer)clearInterval(syncTimer);
+  if(!demoMode){
+    syncTimer=setInterval(()=>{loadFromSheet().catch(()=>{})},60000);
+  }
+}
+
+// ---- UI HELPERS ----
+function showLoading(msg){document.getElementById('loading-msg').textContent=msg||'Carregando...';document.getElementById('loading').classList.add('show')}
+function hideLoading(){document.getElementById('loading').classList.remove('show')}
+function showApp(){document.getElementById('auth-screen').style.display='none';document.getElementById('app').style.display='flex';render();}
+function setSyncBadge(type,msg){const b=document.getElementById('sync-badge');b.className='sync-badge '+type;b.textContent=msg==='Sincronizado'?'✓ '+msg:msg==='Salvando...'?'↻ '+msg:'⚠ '+msg.replace('Sincronizado','').replace('Modo local','Modo local');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// ---- RENDER ----
+function getFiltered(){
+  let arr=clients;
+  if(filterTemp!=='all')arr=arr.filter(c=>c.temp===filterTemp);
+  const q=(document.getElementById('search')||{value:''}).value.toLowerCase();
+  if(q)arr=arr.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  return arr;
+}
+
+function render(){
+  renderStats();
+  renderKanban();
+}
+
+function renderStats(){
+  const all=clients;
+  const won=all.filter(c=>c.status==='won');
+  const prog=all.filter(c=>c.status==='');
+  const rev=won.filter(c=>c.budget>0).reduce((s,c)=>s+Number(c.budget),0);
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${all.length}</div><div class="stat-sub">clientes</div></div>
+    <div class="stat"><div class="stat-label">Em andamento</div><div class="stat-val">${prog.length}</div><div class="stat-sub">negociações</div></div>
+    <div class="stat"><div class="stat-label">Fechadas</div><div class="stat-val">${won.length}</div><div class="stat-sub">contratos</div></div>
+    <div class="stat"><div class="stat-label">Receita</div><div class="stat-val">R$${rev.toLocaleString('pt-BR')}</div><div class="stat-sub">das fechadas</div></div>
+  `;
+}
+
+function renderKanban(){
+  const filtered=getFiltered();
+  let html='';
+  STAGES.forEach((s,i)=>{
+    const cards=filtered.filter(c=>c.stage===i);
+    html+=`<div class="col">
+      <div class="col-head acc-${i}">
+        <span class="col-title">${s}</span>
+        <span class="col-cnt">${cards.length}</span>
+      </div>
+      <div class="col-body">`;
+    cards.forEach(c=>{
+      const tc=c.temp==='Quente'?'pill-q':c.temp==='Morno'?'pill-m':'pill-f';
+      const sc=c.status==='won'?'pill-won':c.status==='lost'?'pill-lost':'pill-prog';
+      const sl=c.status==='won'?'Fechou ✓':c.status==='lost'?'Não fechou':'Em andamento';
+      const prev=i>0?`<button class="mv" onclick="mv(event,${c.id},-1)">←</button>`:'';
+      const nxt=i<7?`<button class="mv" onclick="mv(event,${c.id},1)">→</button>`:'';
+      html+=`<div class="card" onclick="openEdit(${c.id})">
+        <button class="del-btn" onclick="del(event,${c.id})" title="Remover">×</button>
+        <div class="card-name">${c.name}</div>
+        ${c.phone?`<div class="card-phone">${c.phone}</div>`:''}
+        <div class="card-row">
+          <span class="pill ${tc}">${c.temp}</span>
+          <span class="pill ${sc}">${sl}</span>
+        </div>
+        ${c.budget?`<div class="budget">R$ ${Number(c.budget).toLocaleString('pt-BR')}</div>`:''}
+        ${c.followup?`<div class="card-fu">📅 FU ${c.followup}</div>`:''}
+        ${c.notes?`<div class="card-note">${c.notes.length>50?c.notes.slice(0,50)+'…':c.notes}</div>`:''}
+        ${c.wedding?`<div class="card-note">💍 ${c.wedding}</div>`:''}
+        <div class="move-row">${prev}${nxt}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  document.getElementById('kanban').innerHTML=html;
+}
+
+function mv(e,id,dir){
+  e.stopPropagation();
+  const c=clients.find(x=>x.id===id);
+  if(!c)return;
+  const ns=c.stage+dir;
+  if(ns<0||ns>7)return;
+  c.stage=ns;
+  render();
+  debounceSync();
+}
+
+function del(e,id){
+  e.stopPropagation();
+  if(!confirm('Remover esta cliente do CRM?'))return;
+  clients=clients.filter(c=>c.id!==id);
+  render();
+  debounceSync();
+}
+
+let syncDebounce=null;
+function debounceSync(){
+  clearTimeout(syncDebounce);
+  syncDebounce=setTimeout(syncNow,2000);
+}
+
+// ---- FILTER ----
+function setFilter(f,btn){
+  filterTemp=f;
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+// ---- MODAL ----
+function openAdd(){
+  editId=null;
+  document.getElementById('modal-h').textContent='Nova cliente';
+  ['name','phone','budget','wedding','followup','notes'].forEach(f=>document.getElementById('f-'+f).value='');
+  document.getElementById('f-temp').value='Quente';
+  document.getElementById('f-stage').value='0';
+  document.getElementById('f-status').value='';
+  document.getElementById('modal-bg').classList.add('open');
+}
+function openEdit(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  editId=id;
+  document.getElementById('modal-h').textContent='Editar: '+c.name;
+  document.getElementById('f-name').value=c.name;
+  document.getElementById('f-phone').value=c.phone;
+  document.getElementById('f-temp').value=c.temp;
+  document.getElementById('f-budget').value=c.budget||'';
+  document.getElementById('f-wedding').value=c.wedding;
+  document.getElementById('f-followup').value=c.followup;
+  document.getElementById('f-stage').value=c.stage;
+  document.getElementById('f-status').value=c.status;
+  document.getElementById('f-notes').value=c.notes;
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+function bgClick(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
+
+function saveClient(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){toast('Informe o nome da cliente.');return;}
+  const obj={name,phone:document.getElementById('f-phone').value.trim(),temp:document.getElementById('f-temp').value,budget:parseFloat(document.getElementById('f-budget').value)||0,wedding:document.getElementById('f-wedding').value.trim(),followup:document.getElementById('f-followup').value.trim(),stage:parseInt(document.getElementById('f-stage').value),status:document.getElementById('f-status').value,notes:document.getElementById('f-notes').value.trim()};
+  if(editId){
+    const idx=clients.findIndex(c=>c.id===editId);
+    clients[idx]={...clients[idx],...obj};
+  } else {
+    obj.id=nextId++;
+    clients.push(obj);
+  }
+  closeModal();render();debounceSync();
+}
+
+// ---- INIT ----
+loadConfig();
+if(cfg.clientId&&cfg.sheetId){initGoogleAuth();}
+// load local demo if was in demo mode
+try{
+  const loc=localStorage.getItem('crm_local');
+  if(loc&&!cfg.clientId){const d=JSON.parse(loc);clients=d.clients;nextId=d.nextId;}
+}catch(e){}
+</script>
+</body>
+</html>
